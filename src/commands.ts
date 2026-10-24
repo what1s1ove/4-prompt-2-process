@@ -18,16 +18,28 @@ const addTodo = (title: string): void => {
 	console.log(`Added #${todo.id}: ${todo.title}`);
 };
 
-const listTodos = (): void => {
-	const todos = loadTodos();
+type ListOptions = {
+	showAll: boolean;
+	onlyCompleted: boolean;
+};
 
-	if (todos.length === 0) {
-		console.log('No todos yet.');
+const listTodos = ({ showAll, onlyCompleted }: ListOptions): void => {
+	const todos = loadTodos();
+	const arr = todos.filter((t) => {
+		if (showAll) {
+			return true;
+		}
+
+		return onlyCompleted ? t.completed : !t.completed;
+	});
+
+	if (arr.length === 0) {
+		console.log('No todos to show.');
 
 		return;
 	}
 
-	for (const todo of todos) {
+	for (const todo of arr) {
 		const checkbox = todo.completed ? '[x]' : '[ ]';
 
 		console.log(`${checkbox} #${todo.id} ${todo.title}`);
