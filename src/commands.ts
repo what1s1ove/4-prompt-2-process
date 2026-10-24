@@ -87,4 +87,28 @@ const todoRemover = (id: number, force: boolean): void => {
 	console.log(`Removed #${id}`);
 };
 
-export { addTodo, doneTodo, listTodos, todoRemover };
+const clearTodos = (dryRun: boolean): void => {
+	const todos = loadTodos();
+	const toRemove = todos.filter((t) => t.completed);
+	const isEmpty = toRemove.length === 0;
+
+	if (isEmpty) {
+		console.log('Nothing to clear.');
+
+		return;
+	}
+
+	for (const x of toRemove) {
+		console.log(`${dryRun ? 'Would remove' : 'Removed'} #${x.id} ${x.title}`);
+	}
+
+	if (dryRun) {
+		return;
+	}
+
+	const tmp = todos.filter((t) => !t.completed);
+
+	saveTodos(tmp);
+};
+
+export { addTodo, clearTodos, doneTodo, listTodos, todoRemover };
