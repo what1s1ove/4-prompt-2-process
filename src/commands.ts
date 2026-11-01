@@ -11,6 +11,7 @@ const addTodo = (title: string): void => {
 		id: getNextId(todos),
 		title,
 		createdAt: new Date().toISOString(),
+		completed: false,
 	};
 
 	saveTodos([...todos, todo]);
@@ -27,8 +28,25 @@ const listTodos = (): void => {
 	}
 
 	for (const todo of todos) {
-		console.log(`#${todo.id} ${todo.title}`);
+		const checkbox = todo.completed ? '[x]' : '[ ]';
+
+		console.log(`${checkbox} #${todo.id} ${todo.title}`);
 	}
 };
 
-export { addTodo, listTodos };
+const doneTodo = (id: number): void => {
+	const todos = loadTodos();
+	const exists = todos.some((t) => t.id === id);
+
+	if (!exists) {
+		console.error(`Todo #${id} not found`);
+		process.exit(1);
+	}
+
+	const data = todos.map((t) => (t.id === id ? { ...t, completed: true } : t));
+
+	saveTodos(data);
+	console.log(`Completed #${id}`);
+};
+
+export { addTodo, doneTodo, listTodos };
