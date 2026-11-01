@@ -3,6 +3,7 @@ type Todo = {
 	title: string;
 	createdAt: string;
 	completed: boolean;
+	urgent: boolean;
 };
 
 export { type Todo };

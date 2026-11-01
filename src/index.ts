@@ -1,17 +1,23 @@
 import { addTodo, doneTodo, listTodos, todoRemover } from './commands.ts';
 
+const urgentFlag = '--urgent';
+
 const [command, ...args] = process.argv.slice(2);
 
 switch (command) {
 	case 'add': {
-		const title = args.join(' ').trim();
+		const urgent = args.includes(urgentFlag);
+		const title = args
+			.filter((a) => a !== urgentFlag)
+			.join(' ')
+			.trim();
 
 		if (!title) {
-			console.error('Usage: add <title>');
+			console.error('Usage: add <title> [--urgent]');
 			process.exit(1);
 		}
 
-		addTodo(title);
+		addTodo(title, urgent);
 		break;
 	}
 	case 'list': {
