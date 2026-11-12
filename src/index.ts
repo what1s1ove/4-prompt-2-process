@@ -1,4 +1,4 @@
-import { addTodo, listTodos } from './commands.ts';
+import { addTodo, doneTodo, listTodos } from './commands.ts';
 
 const [command, ...args] = process.argv.slice(2);
 
@@ -18,8 +18,19 @@ switch (command) {
 		listTodos();
 		break;
 	}
+	case 'done': {
+		const num = Number(args[0]);
+
+		if (Number.isNaN(num)) {
+			console.error('Usage: done <id>');
+			process.exit(1);
+		}
+
+		doneTodo(num);
+		break;
+	}
 	default: {
-		console.error('Usage: <add|list> [args]');
+		console.error('Usage: <add|list|done> [args]');
 		process.exit(1);
 	}
 }
