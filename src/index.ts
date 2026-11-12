@@ -1,4 +1,4 @@
-import { addTodo, doneTodo, listTodos, todoRemover } from './commands.ts';
+import { addTodo, clearTodos, doneTodo, listTodos, todoRemover } from './commands.ts';
 
 const urgentFlag = '--urgent';
 
@@ -50,8 +50,14 @@ switch (command) {
 		todoRemover(num, force);
 		break;
 	}
+	case 'clear': {
+		const dryRun = args.includes('--dry-run');
+
+		clearTodos(dryRun);
+		break;
+	}
 	default: {
-		console.error('Usage: <add|list|done|remove> [args]');
+		console.error('Usage: <add|list|done|remove|clear> [args]');
 		process.exit(1);
 	}
 }
