@@ -49,4 +49,26 @@ const doneTodo = (id: number): void => {
 	console.log(`Completed #${id}`);
 };
 
-export { addTodo, doneTodo, listTodos };
+const todoRemover = (id: number, force: boolean): void => {
+	const todos = loadTodos();
+	const item = todos.find((t) => t.id === id);
+
+	if (!item) {
+		console.error(`Todo #${id} not found`);
+		process.exit(1);
+	}
+
+	const canDelete = item.completed || force;
+
+	if (!canDelete) {
+		console.error(`Todo #${id} is not completed. Use --force to remove it anyway`);
+		process.exit(1);
+	}
+
+	const res = todos.filter((t) => t.id !== id);
+
+	saveTodos(res);
+	console.log(`Removed #${id}`);
+};
+
+export { addTodo, doneTodo, listTodos, todoRemover };

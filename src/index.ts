@@ -1,4 +1,4 @@
-import { addTodo, doneTodo, listTodos } from './commands.ts';
+import { addTodo, doneTodo, listTodos, todoRemover } from './commands.ts';
 
 const [command, ...args] = process.argv.slice(2);
 
@@ -29,8 +29,20 @@ switch (command) {
 		doneTodo(num);
 		break;
 	}
+	case 'remove': {
+		const num = Number(args[0]);
+		const force = args.includes('--force');
+
+		if (Number.isNaN(num)) {
+			console.error('Usage: remove <id> [--force]');
+			process.exit(1);
+		}
+
+		todoRemover(num, force);
+		break;
+	}
 	default: {
-		console.error('Usage: <add|list|done> [args]');
+		console.error('Usage: <add|list|done|remove> [args]');
 		process.exit(1);
 	}
 }
