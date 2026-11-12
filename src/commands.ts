@@ -5,13 +5,14 @@ const getNextId = (todos: Todo[]): number => {
 	return todos.reduce((maxId, todo) => Math.max(maxId, todo.id), 0) + 1;
 };
 
-const addTodo = (title: string): void => {
+const addTodo = (title: string, urgent: boolean): void => {
 	const todos = loadTodos();
 	const todo: Todo = {
 		id: getNextId(todos),
 		title,
 		createdAt: new Date().toISOString(),
 		completed: false,
+		urgent,
 	};
 
 	saveTodos([...todos, todo]);
@@ -39,10 +40,13 @@ const listTodos = ({ showAll, onlyCompleted }: ListOptions): void => {
 		return;
 	}
 
-	for (const todo of arr) {
-		const checkbox = todo.completed ? '[x]' : '[ ]';
+	const sorted = [...arr].sort((a, b) => Number(b.urgent) - Number(a.urgent));
 
-		console.log(`${checkbox} #${todo.id} ${todo.title}`);
+	for (const todo of sorted) {
+		const checkbox = todo.completed ? '[x]' : '[ ]';
+		const mark = todo.urgent ? '!' : ' ';
+
+		console.log(`${mark} ${checkbox} #${todo.id} ${todo.title}`);
 	}
 };
 
