@@ -15,7 +15,10 @@ switch (command) {
 		break;
 	}
 	case 'list': {
-		listTodos();
+		const all = args.includes('--all');
+		const completedFlag = args.includes('--completed');
+
+		listTodos({ showAll: all, onlyCompleted: completedFlag });
 		break;
 	}
 	case 'done': {
